@@ -10,8 +10,8 @@
           controller: 'MainCtrl'
         });
     })
-    .controller('MainCtrl', function ($scope, wikipediaService) {
-      $scope.articles = []
+    .controller('MainCtrl', function ($scope, wikipediaService, twitterService) {
+      $scope.articles = [];
       
       $scope.tweets = [
         {author: 'tweet 1', date: "2014-01-01T23:28:56.782Z", 
@@ -22,7 +22,8 @@
          content: "someone said this..."},
       ];
     })
-  .controller('FormCtrl', function($scope, $http, $window, wikipediaService) {
+  .controller('FormCtrl', function($scope, $http, $window, wikipediaService,
+                                   twitterService) {
     $scope.checkboxModel = {
       searchWikipedia : true,
       searchTwitter: false,
@@ -54,6 +55,27 @@
             }
           );
       }
+
+
+      if($scope.checkboxModel.searchTwitter && $scope.searchboxModel.searchText) {
+        twitterService.search($scope.searchboxModel.searchText)
+          .then(
+            function(tweets){
+              console.log("GOT TWEETS");
+              console.log(tweets);
+
+              for (var tweetIndex in tweets){
+                $scope.articles.push({
+                  title: tweets[tweetIndex].author,
+                  content: tweets[tweetIndex].content
+                });
+                console.log($scope.tweets);
+              }
+            }
+          );
+        }
+
+
     };
   });
   
