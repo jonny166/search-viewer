@@ -5,10 +5,15 @@
   angular.module('searchapp-main',['ngRoute', 'searchapp-main.services'])
     .config(function ($routeProvider) {
       $routeProvider
-        .when('/', {
+        .when('/search/:search_term', {
+          templateUrl: 'main/main.html',
+          controller: 'MainCtrl'
+        })
+        .when('/search', {
           templateUrl: 'main/main.html',
           controller: 'MainCtrl'
         });
+
     })
     .controller('MainCtrl', function ($scope, wikipediaService, twitterService) {
       $scope.articles = [];
@@ -16,18 +21,15 @@
       $scope.tweets = [];
     })
   .controller('FormCtrl', function($scope, $http, $window, wikipediaService,
-                                   twitterService) {
-    $scope.checkboxModel = {
-      searchWikipedia : true,
-      searchTwitter: false,
-    };
-    $scope.searchboxModel = {
-      searchText: "Cabbage",
-    };
+                                   twitterService, $location, $routeParams) {
+
     $scope.submit = function() {
       //Clear the old results
       $scope.articles.length = 0;
       $scope.tweets.length = 0;
+
+      $location.path('/search').search(
+        {search_term: $scope.searchboxModel.searchText});
 
       if($scope.checkboxModel.searchWikipedia && $scope.searchboxModel.searchText) {
 
@@ -97,9 +99,25 @@
           });
         });
       }
-
-
     };
+
+    $scope.checkboxModel = {
+      searchWikipedia : true,
+      searchTwitter: false,
+    };
+
+    $scope.searchboxModel = {
+      searchText: $routeParams.search_term, //Inject the route params
+    };
+
+    if (typeof($scope.searchboxModel.searchText) ===  'undefined'){
+      $scope.searchboxModel.searchText = "Cabbage"; //default
+    }
+    else{
+      // Since a search term was specified, go ahead and submit it
+      $scope.submit();
+    }
+
   });
   
 })();
