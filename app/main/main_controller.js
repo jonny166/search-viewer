@@ -7,11 +7,13 @@
       $routeProvider
         .when('/search/:search_term/:search_wikipedia/:search_twitter', {
           templateUrl: 'main/main.html',
-          controller: 'MainCtrl'
+          controller: 'MainCtrl',
+          reloadOnSearch: false,
         })
         .when('/search', {
           templateUrl: 'main/main.html',
-          controller: 'MainCtrl'
+          controller: 'MainCtrl',
+          reloadOnSearch: false,
         });
 
     })
