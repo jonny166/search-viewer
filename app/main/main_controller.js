@@ -5,7 +5,7 @@
   angular.module('searchapp-main',['ngRoute', 'searchapp-main.services'])
     .config(function ($routeProvider) {
       $routeProvider
-        .when('/search/:search_term', {
+        .when('/search/:search_term/:search_wikipedia/:search_twitter', {
           templateUrl: 'main/main.html',
           controller: 'MainCtrl'
         })
@@ -28,10 +28,16 @@
       $scope.articles.length = 0;
       $scope.tweets.length = 0;
 
+      // Store the form settings as url params
       $location.path('/search').search(
-        {search_term: $scope.searchboxModel.searchText});
+        {search_term: $scope.searchboxModel.searchText,
+         search_wikipedia: $scope.checkboxModel.searchWikipedia,
+         search_twitter: $scope.checkboxModel.searchTwitter,
+        });
 
-      if($scope.checkboxModel.searchWikipedia && $scope.searchboxModel.searchText) {
+
+      if($scope.checkboxModel.searchWikipedia === true && 
+         $scope.searchboxModel.searchText) {
 
         wikipediaService.search($scope.searchboxModel.searchText)
           .then(
@@ -67,7 +73,8 @@
       }
 
 
-      if($scope.checkboxModel.searchTwitter && $scope.searchboxModel.searchText) {
+      if($scope.checkboxModel.searchTwitter ===true && 
+         $scope.searchboxModel.searchText) {
         twitterService.search($scope.searchboxModel.searchText)
           .then(
             function(tweets){
@@ -101,14 +108,22 @@
       }
     };
 
+    //Inject the route params,
     $scope.checkboxModel = {
-      searchWikipedia : true,
-      searchTwitter: false,
+      searchWikipedia : $routeParams.search_wikipedia, 
+      searchTwitter: $routeParams.search_twitter,
     };
 
     $scope.searchboxModel = {
-      searchText: $routeParams.search_term, //Inject the route params
+      searchText: $routeParams.search_term,
     };
+
+    if (typeof($scope.checkboxModel.searchWikipedia) ===  'undefined'){
+      $scope.checkboxModel.searchWikipedia = true; //default
+    }
+    if (typeof($scope.checkboxModel.searchTwitter) ===  'undefined'){
+      $scope.checkboxModel.searchTwitter = true; //default
+    }
 
     if (typeof($scope.searchboxModel.searchText) ===  'undefined'){
       $scope.searchboxModel.searchText = "Cabbage"; //default
