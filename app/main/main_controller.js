@@ -31,17 +31,19 @@
       searchText: "test",
     };
     $scope.submit = function() {
-      if($scope.searchboxModel.searchText) {
+      //Clear the old results
+      $scope.articles.length = 0;
+      $scope.tweets.length = 0;
+
+      if($scope.checkboxModel.searchWikipedia && $scope.searchboxModel.searchText) {
         //$window.alert("You searched for " + $scope.searchboxModel.searchText);
-        //TODO: check the checkboxes to see which API to search
+
         wikipediaService.search($scope.searchboxModel.searchText)
           .then(
             function(articles){
               console.log("GOT ARTICLES");
               console.log(articles);
 
-              //Clear the old results
-              $scope.articles.length = 0
               for (var articleIndex in articles){
                 $scope.articles.push({
                   title: articles[articleIndex].title,
