@@ -10,9 +10,10 @@
       
       function search(searchTerm) {
         var request = $http({
-          method: "get",
+          method: "jsonp",
           url: "http://en.wikipedia.org/w/api.php",
           params: {"action": "query",
+                   callback: 'JSON_CALLBACK',
                    "prop": "extracts",
                    "exintro": "",
                    "explaintext": "",
@@ -34,7 +35,7 @@
       }
       
       function handleSuccess(response){
-        return(response.data);
+        return(response.data.query.pages);
       }
     });
 })();
