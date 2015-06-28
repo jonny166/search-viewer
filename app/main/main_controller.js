@@ -13,14 +13,7 @@
     .controller('MainCtrl', function ($scope, wikipediaService, twitterService) {
       $scope.articles = [];
       
-      $scope.tweets = [
-        {author: 'tweet 1', date: "2014-01-01T23:28:56.782Z", 
-         content: "someone said this..."},
-        {author: 'tweet 3', date: "2014-04-01T23:28:56.782Z", 
-         content: "someone said this..."},
-        {author: 'tweet 2', date: "2014-02-01T23:28:56.782Z",
-         content: "someone said this..."},
-      ];
+      $scope.tweets = [];
     })
   .controller('FormCtrl', function($scope, $http, $window, wikipediaService,
                                    twitterService) {
@@ -29,7 +22,7 @@
       searchTwitter: false,
     };
     $scope.searchboxModel = {
-      searchText: "test",
+      searchText: "Cabbage",
     };
     $scope.submit = function() {
       //Clear the old results
@@ -37,7 +30,6 @@
       $scope.tweets.length = 0;
 
       if($scope.checkboxModel.searchWikipedia && $scope.searchboxModel.searchText) {
-        //$window.alert("You searched for " + $scope.searchboxModel.searchText);
 
         wikipediaService.search($scope.searchboxModel.searchText)
           .then(
@@ -46,14 +38,30 @@
               console.log(articles);
 
               for (var articleIndex in articles){
-                $scope.articles.push({
-                  title: articles[articleIndex].title,
-                  content: articles[articleIndex].extract
-                });
-                console.log($scope.articles);
+                if (typeof articles[articleIndex].missing != 'undefined'){
+                  $scope.articles.push({
+                    title: articles[articleIndex].title,
+                    content: "No matching article found",
+                  });
+                }
+                else{
+                  $scope.articles.push({
+                    title: articles[articleIndex].title,
+                    content: articles[articleIndex].extract
+                  });
+                  }
               }
             }
-          );
+          )
+        .catch(function(fallback) {
+          //Wikipedia API failed
+          console.log("Wikipedia Error");
+          $scope.articles.length = 0;
+          $scope.articles.push({
+            title: "",
+            content: fallback,
+          });
+        });
       }
 
 
@@ -64,16 +72,31 @@
               console.log("GOT TWEETS");
               console.log(tweets);
 
-              for (var tweetIndex in tweets){
-                $scope.articles.push({
-                  title: tweets[tweetIndex].author,
-                  content: tweets[tweetIndex].content
+              for (var tweetIndex in tweets.data){
+                $scope.tweets.push({
+                    author: tweets.data[tweetIndex].author,
+                    content: tweets.data[tweetIndex].content
                 });
-                console.log($scope.tweets);
+              }
+              
+              if (tweets.data.length === 0){
+                $scope.tweets.push({
+                  author: "",
+                  content: tweets.message,
+                });
               }
             }
-          );
-        }
+          )
+        .catch(function(fallback) {
+          //Twitter API failed
+          console.log("Twitter Error");
+          $scope.tweets.length = 0;
+          $scope.tweets.push({
+            author: "",
+            content: fallback,
+          });
+        });
+      }
 
 
     };

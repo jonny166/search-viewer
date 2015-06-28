@@ -65,8 +65,6 @@
       }
       
       function handleSuccess(response){
-        console.log("GOT TWITTER DATA");
-        console.log(response.data);
         return(response.data);
       }
     });

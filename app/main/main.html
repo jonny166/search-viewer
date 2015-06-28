@@ -30,7 +30,7 @@
 
 <ul>
     <li ng-repeat="tweet in tweets | orderBy:'date'">
-      <h2>{{tweet.author}}</h2>
+      <h2>@{{tweet.author}}</h2>
       <p>{{tweet.content}}</p>
     </li>
 </ul>
