@@ -18,6 +18,7 @@ The rest api should now be up and running on port 5000
 From the main repository directory:
 ```
 > npm install
+> bower install
 > gulp
 ```
 The app should now be up and running on port 8080
@@ -33,7 +34,7 @@ Unit tests for the front-end are run like this:
 ```
 > karma start karma-unit.js
 ```
-
+* NOTE: These are not currently running properly due to dependency issues *
 
 
 ## Performance
