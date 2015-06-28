@@ -2,7 +2,7 @@
   'use strict';
   
   
-  angular.module('searchapp-main',['ngRoute'])
+  angular.module('searchapp-main',['ngRoute', 'searchapp-main.services'])
     .config(function ($routeProvider) {
       $routeProvider
         .when('/', {
@@ -10,7 +10,7 @@
           controller: 'MainCtrl'
         });
     })
-    .controller('MainCtrl', function ($scope) {
+    .controller('MainCtrl', function ($scope, wikipediaService) {
       $scope.articles = [
         {title: 'article 1', content: "some content here..."},
         {title: 'article 3', content: "some content here..."},
@@ -26,7 +26,7 @@
          content: "someone said this..."},
       ];
     })
-  .controller('FormCtrl', function($scope, $window) {
+  .controller('FormCtrl', function($scope, $http, $window, wikipediaService) {
     $scope.checkboxModel = {
       searchWikipedia : true,
       searchTwitter: false,
@@ -37,7 +37,15 @@
     $scope.submit = function() {
       if($scope.searchboxModel.searchText) {
         $window.alert("You searched for " + $scope.searchboxModel.searchText);
-        //TODO: Trigger search in appropriate APIs
+        //TODO: check the checkboxes to see which API to search
+        wikipediaService.search($scope.searchboxModel.searchText)
+          .then(
+            function(articles){
+              console.log("GOT ARTICLES");
+              console.log(articles);
+              //TODO: update $scope.articles with wikipedia data
+            }
+          );
       }
     };
   });

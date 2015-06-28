@@ -1,9 +1,9 @@
 {
   "name": "searchapp",
   "main": "app.js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "authors": [
-    "jessie <jessie@apollo.com.ph>"
+    "kathy <kathy.church@gmail.com>"
   ],
   "license": "MIT",
   "private": true,
@@ -15,8 +15,8 @@
     "tests"
   ],
   "devDependencies": {
-    "angular": "~1.2.14",
-    "angular-route": "~1.2.14"
+    "angular": "~1.4.1",
+    "angular-route": "~1.4.1",
   }
 }
 
