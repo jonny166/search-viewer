@@ -10,6 +10,9 @@ from flask.ext.restful import Api
 from flask import jsonify, Flask, request
 from twython import Twython, TwythonRateLimitError, TwythonError
 
+CONSUMER_KEY = "QMrPSdmGUrd2PX5nqh8izxPOS"
+CONSUMER_SECRET = "a4WqlRCvOb834a4hXkUJxY19oiYgMFTNJxyzNcnG1UM75pDZvY"
+
 app = Flask(__name__)
 logger = app.logger
 api = Api(app)
@@ -21,24 +24,25 @@ logger.debug("Starting flask app...")
 def search_twitter():
     '''search for search_term in twitter api'''
     logger.debug("Got a request!!")
+
     results = {"message": "",
                "data": [],
                }
+
     search_term = request.args.get("search_term", None)
     if not search_term:
         results['message'] = 'search_term must be provided'
-        return results, 400
-    consumer_key = "QMrPSdmGUrd2PX5nqh8izxPOS"
-    consumer_secret = "a4WqlRCvOb834a4hXkUJxY19oiYgMFTNJxyzNcnG1UM75pDZvY"
+        return jsonify(results), 400
 
     try:
-        twitter = Twython(consumer_key, consumer_secret, oauth_version=2)
+        twitter = Twython(CONSUMER_KEY, CONSUMER_SECRET, oauth_version=2)
         token = twitter.obtain_access_token()
-        twitter = Twython(consumer_key, access_token=token)
+        twitter = Twython(CONSUMER_KEY, access_token=token)
         search = twitter.search(q=search_term, count=5, lang="en")
 
         logger.debug("Got a search result!")
         logger.debug(search)
+
         statuses = search.get('statuses', {})
         if not statuses:
             results['message'] = "No matching tweets found"
@@ -57,6 +61,7 @@ def search_twitter():
         results['message'] = 'Twitter API Error'
         return jsonify(results), 401
 
+    logger.debug("Returning results:")
     logger.debug(results)
     return jsonify(results)
 #end search_twitter

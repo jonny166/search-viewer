@@ -4,4 +4,5 @@ dist/
 build/
 *~
 *tern-port
-src/
+*.log
+*.pyc
