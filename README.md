@@ -4,11 +4,11 @@ An AngularJS app that allows you to search both Twitter and Wikipedia.  Wikipedi
 
 
 ## Installation
-You will need to install NPM, Gulp, Python2.7, and pip:
+You will need to install NPM, Python2.7, and pip:
 
 Clone the repository
 
-In the rest_api directory:
+In the main repository directory in /rest_api:
 ```
 > pip install -r requirements.txt
 > python2.7 search_api.py
@@ -17,9 +17,24 @@ The rest api should now be up and running on port 5000
 
 From the main repository directory:
 ```
+> npm install
+> bower install
 > gulp
 ```
 The app should now be up and running on port 8080
+
+
+## Testing
+Make sure you have karma installed to run the unit tests
+```
+> npm install karma
+```
+
+Unit tests for the front-end are run like this:
+```
+> karma start karma-unit.js
+```
+* NOTE: These are not currently running properly due to dependency issues *
 
 
 ## Performance
