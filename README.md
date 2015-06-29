@@ -33,9 +33,9 @@ Unit tests for the front-end are run like this:
 * NOTE: These karma tests are not currently running properly due to dependency issues *
 
 To run the Python unit tests:
-'''
+```
 > python2.7 rest_api/src/rest_api_test.py
-'''
+```
 * NOTE: The python unit tests would be greatly improved with a mock service to test the rate limit error without actually triggering it *
 
 
